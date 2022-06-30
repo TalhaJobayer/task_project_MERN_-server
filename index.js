@@ -3,7 +3,7 @@ app=express();
 require('dotenv').config()
 cors = require('cors')
 port=process.env.PORT || 5000
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 // middle Ware
 app.use(cors());
@@ -25,7 +25,27 @@ async function run() {
      res.send(data)
     })
     // All data loaded done===================================
-  
+    app.post('/api/billing-list' ,async (req,res)=>{
+      const NewBill=req.body;
+      const result=await dataCollection.insertOne(NewBill)
+       res.send(result)
+})
+ // specific data api========
+ app.get('/api/billing-list/:id', async(req,res)=>{
+  const id=req.params.id;
+  const query={_id:ObjectId(id)}
+  const singleData= await dataCollection.findOne(query)
+  res.send(singleData)
+ })
+// api for singeldelete===============
+app.delete('/api/billing-list/:id', async (req,res) => {
+  const id=req.params.id
+     const query={_id:ObjectId(id)}
+     
+     const result= await dataCollection.deleteOne(query)
+     res.send(result)
+});
+// singelSearch===============
 
     
     
