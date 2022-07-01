@@ -1,6 +1,7 @@
 const express = require('express');
 app=express();
 require('dotenv').config()
+const jwt = require('jsonwebtoken');
 cors = require('cors')
 port=process.env.PORT || 5000
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -19,9 +20,18 @@ async function run() {
     await client.connect();
     const dataCollection = client.db("task").collection("data");
     app.get('/api/billing-list', async  (req,res)=>{
+      // console.log('query',req.query);
+      const ActivePage=parseInt(req.query.Activepage)
+      
       const query = {};
      const cursor = dataCollection.find(query);
-     const data= await cursor.toArray();
+     let data;
+     if(ActivePage){
+          data= await cursor.skip(ActivePage*10).limit(10).toArray();
+     }else{
+       data= await cursor.toArray();
+     }
+     
      res.send(data)
     })
     // All data loaded done===================================
@@ -68,6 +78,13 @@ app.put('/api/billing-list/:email', async (req, res) => {
   res.send(result);
 })
     
+// pagination====
+app.get('/dataCount',async(req,res)=>{
+//   const query={};
+//  const cursor= dataCollection.find(query)
+ const allData= await dataCollection.estimatedDocumentCount();
+ res.send({allData})
+})
     
 
   } finally {
