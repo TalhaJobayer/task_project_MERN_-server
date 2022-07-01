@@ -46,7 +46,27 @@ app.delete('/api/billing-list/:id', async (req,res) => {
      res.send(result)
 });
 // singelSearch===============
-
+app.put('/api/billing-list/:email', async (req, res) => {
+  const email = req.params.Email;
+  console.log(email);
+  const{ Email,FullName,Phone,PaidAmmount} = req.body;
+  console.log(Email,FullName,Phone,PaidAmmount);
+  console.log(Phone,PaidAmmount);
+  // const Update={Email,FullName,Phone,PaidAmmount}
+  const filter = { email: email };
+  const updateDoc = {
+    $set: {
+      Email:req.body.Email,
+      FullName:req.body.FullName,
+      Phone:req.body.Phone,
+      PaidAmmount:req.body.PaidAmmount
+    },
+  };
+  console.log(updateDoc);
+  const result = await dataCollection.updateOne(filter, updateDoc);
+  
+  res.send(result);
+})
     
     
 
