@@ -1,7 +1,7 @@
 const express = require('express');
 app=express();
 require('dotenv').config()
-const jwt = require('jsonwebtoken');
+
 cors = require('cors')
 port=process.env.PORT || 5000
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -97,7 +97,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-  res.send('talha you are doing great!')
+  res.send(' you are doing great!')
 })
 
 app.listen(port, () => {
